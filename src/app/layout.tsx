@@ -7,28 +7,23 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-<<<<<<< HEAD
   title: "Honest Review",
   description: "Real feedback from real people.",
-=======
-  title: 'Honest Review',
-  description: 'Real feedback from real people.',
->>>>>>> c2148533e44cd34bb12db0e1fb0007f4315e3027
 };
 
 interface RootLayoutProps {
   children: React.ReactNode;
 }
 
-export default async function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <AuthProvider>
-        <body className={inter.className}>
+      <body className={inter.className}>
+        <AuthProvider>
           {children}
           <Toaster />
-        </body>
-      </AuthProvider>
+        </AuthProvider>
+      </body>
     </html>
   );
 }
