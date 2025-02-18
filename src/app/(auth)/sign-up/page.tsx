@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDebounce } from "usehooks-ts";
 import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -83,7 +82,6 @@ export default function SignUpForm() {
 
       const axiosError = error as AxiosError<ApiResponse>;
 
-      // Default error message
       let errorMessage = axiosError.response?.data.message;
       ("There was a problem with your sign-up. Please try again.");
 
@@ -98,30 +96,36 @@ export default function SignUpForm() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-800">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800">
+      <div className="w-full max-w-md p-8 space-y-6 bg-gray-800 bg-opacity-80 rounded-2xl shadow-[5px_5px_15px_rgba(0,0,0,0.4)] border border-gray-700 backdrop-blur-xl">
         <div className="text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-            Join True Feedback
+          <h1 className="text-4xl font-extrabold tracking-tight text-gray-100 drop-shadow-lg">
+            Join Honest Review
           </h1>
-          <p className="mb-4">Sign up to start your anonymous adventure</p>
+          <p className="text-gray-400 text-sm">
+            Sign up to start your anonymous adventure
+          </p>
         </div>
+
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             <FormField
               name="username"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel className="text-gray-300">Username</FormLabel>
                   <Input
                     {...field}
                     onChange={(e) => {
                       field.onChange(e);
                       setUsername(e.target.value);
                     }}
+                    className="bg-gray-700 text-gray-200 border border-gray-600 focus:ring-2 focus:ring-gray-500 focus:border-gray-400 rounded-lg shadow-inner transition-all transform hover:scale-[1.02]"
                   />
-                  {isCheckingUsername && <Loader2 className="animate-spin" />}
+                  {isCheckingUsername && (
+                    <Loader2 className="animate-spin text-gray-400" />
+                  )}
                   {!isCheckingUsername && usernameMessage && (
                     <p
                       className={`text-sm ${
@@ -142,9 +146,12 @@ export default function SignUpForm() {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <Input {...field} name="email" />
-                  <p className="text-muted text-gray-400 text-sm">
+                  <FormLabel className="text-gray-300">Email</FormLabel>
+                  <Input
+                    {...field}
+                    className="bg-gray-700 text-gray-200 border border-gray-600 focus:ring-2 focus:ring-gray-500 focus:border-gray-400 rounded-lg shadow-inner transition-all transform hover:scale-[1.02]"
+                  />
+                  <p className="text-gray-400 text-sm">
                     We will send you a verification code
                   </p>
                   <FormMessage />
@@ -157,13 +164,21 @@ export default function SignUpForm() {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <Input type="password" {...field} name="password" />
+                  <FormLabel className="text-gray-300">Password</FormLabel>
+                  <Input
+                    type="password"
+                    {...field}
+                    className="bg-gray-700 text-gray-200 border border-gray-600 focus:ring-2 focus:ring-gray-500 focus:border-gray-400 rounded-lg shadow-inner transition-all transform hover:scale-[1.02]"
+                  />
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              className="w-full bg-gradient-to-br from-gray-600 to-gray-400 hover:from-gray-500 hover:to-gray-300 text-white font-semibold rounded-xl shadow-lg py-2 transition-all transform hover:scale-105 active:scale-95"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -175,10 +190,14 @@ export default function SignUpForm() {
             </Button>
           </form>
         </Form>
+
         <div className="text-center mt-4">
-          <p>
+          <p className="text-gray-400">
             Already a member?{" "}
-            <Link href="/sign-in" className="text-blue-600 hover:text-blue-800">
+            <Link
+              href="/sign-in"
+              className="text-gray-300 hover:text-white hover:underline font-medium transition-all"
+            >
               Sign in
             </Link>
           </p>

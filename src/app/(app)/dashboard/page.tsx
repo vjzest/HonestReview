@@ -23,13 +23,7 @@ function UserDashboard() {
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
 
   const { toast } = useToast();
-
-  const handleDeleteMessage = (messageId: string) => {
-    setMessages(messages.filter((message) => message._id !== messageId));
-  };
-
   const { data: session } = useSession();
-
   const form = useForm({
     resolver: zodResolver(AcceptMessageSchema),
   });
@@ -37,29 +31,9 @@ function UserDashboard() {
   const { register, watch, setValue } = form;
   const acceptMessages = watch("acceptMessages");
 
-  const fetchAcceptMessages = useCallback(async () => {
-    setIsSwitchLoading(true);
-    try {
-      const response = await axios.get<ApiResponse>("/api/accept-messages");
-      setValue("acceptMessages", response.data.isAcceptingMessages);
-    } catch (error) {
-      const axiosError = error as AxiosError<ApiResponse>;
-      toast({
-        title: "Error",
-        description:
-          axiosError.response?.data.message ??
-          "Failed to fetch message settings",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSwitchLoading(false);
-    }
-  }, [setValue, toast]);
-
   const fetchMessages = useCallback(
-    async (refresh: boolean = false) => {
+    async (refresh = false) => {
       setIsLoading(true);
-      setIsSwitchLoading(false);
       try {
         const response = await axios.get<ApiResponse>("/api/get-messages");
         setMessages(response.data.messages || []);
@@ -70,120 +44,98 @@ function UserDashboard() {
           });
         }
       } catch (error) {
-        const axiosError = error as AxiosError<ApiResponse>;
         toast({
           title: "Error",
-          description:
-            axiosError.response?.data.message ?? "Failed to fetch messages",
+          description: "Failed to fetch messages",
           variant: "destructive",
         });
       } finally {
         setIsLoading(false);
-        setIsSwitchLoading(false);
       }
     },
-    [setIsLoading, setMessages, toast]
+    [toast]
   );
 
-  // Fetch initial state from the server
   useEffect(() => {
     if (!session || !session.user) return;
-
     fetchMessages();
+  }, [session, fetchMessages]);
 
-    fetchAcceptMessages();
-  }, [session, setValue, toast, fetchAcceptMessages, fetchMessages]);
-
-  // Handle switch change
   const handleSwitchChange = async () => {
     try {
-      const response = await axios.post<ApiResponse>("/api/accept-messages", {
+      await axios.post<ApiResponse>("/api/accept-messages", {
         acceptMessages: !acceptMessages,
       });
       setValue("acceptMessages", !acceptMessages);
-      toast({
-        title: response.data.message,
-        variant: "default",
-      });
-    } catch (error) {
-      const axiosError = error as AxiosError<ApiResponse>;
+      toast({ title: "Updated successfully" });
+    } catch {
       toast({
         title: "Error",
-        description:
-          axiosError.response?.data.message ??
-          "Failed to update message settings",
+        description: "Failed to update settings",
         variant: "destructive",
       });
     }
   };
 
-  if (!session || !session.user) {
-    return <div></div>;
-  }
+  if (!session || !session.user) return <div></div>;
 
   const { username } = session.user as User;
-
-  const baseUrl = `${window.location.protocol}//${window.location.host}`;
-  const profileUrl = `${baseUrl}/u/${username}`;
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(profileUrl);
-    toast({
-      title: "URL Copied!",
-      description: "Profile URL has been copied to clipboard.",
-    });
-  };
+  const profileUrl = `${window.location.protocol}//${window.location.host}/u/${username}`;
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="my-8 mx-auto p-6 bg-white rounded-lg shadow-lg w-full max-w-4xl">
-        <h1 className="text-4xl font-bold mb-6 text-gray-800">Dashboard</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white">
+      <div className="my-8 mx-auto p-8 bg-gray-800/40 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-4xl border border-gray-700">
+        <h1 className="text-4xl font-extrabold text-gray-200 mb-6">
+          Dashboard
+        </h1>
 
         {/* Profile Link Section */}
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold text-gray-700 mb-3">
+        <div className="mb-6 bg-gray-900/50 p-4 rounded-lg shadow-md border border-gray-700">
+          <h2 className="text-xl font-semibold text-gray-300 mb-3">
             Copy Your Link
           </h2>
-          <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg shadow-sm border">
+          <div className="flex flex-col sm:flex-row items-center gap-3">
             <input
               type="text"
               value={profileUrl}
               disabled
-              className="flex-1 p-2 text-gray-700 bg-gray-100 rounded-md border focus:outline-none"
+              className="flex-1 p-2 text-gray-300 bg-gray-800 rounded-lg border border-gray-600 focus:outline-none min-w-0"
             />
-            <Button
-              onClick={copyToClipboard}
-              className="bg-gray-800 hover:bg-gray-700 text-white"
-            >
-              Copy
-            </Button>
-            <Button
-              onClick={() => (window.location.href = profileUrl)}
-              className="bg-indigo-600 hover:bg-indigo-500 text-white"
-            >
-              Go to Profile
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              <Button
+                onClick={() => navigator.clipboard.writeText(profileUrl)}
+                className="bg-gray-700 hover:bg-gray-600 text-white rounded-lg shadow-lg transition-all transform hover:scale-105 w-full sm:w-auto"
+              >
+                Copy
+              </Button>
+              <Button
+                onClick={() => (window.location.href = profileUrl)}
+                className="bg-blue-700 hover:bg-blue-600 text-white rounded-lg shadow-lg transition-all transform hover:scale-105 w-full sm:w-auto"
+              >
+                Go to Profile
+              </Button>
+            </div>
           </div>
         </div>
 
         {/* Message Acceptance Toggle */}
-        <div className="flex items-center bg-gray-50 p-4 rounded-lg shadow-sm border">
+        <div className="flex items-center bg-gray-900/50 p-4 rounded-lg shadow-md border border-gray-700">
           <Switch
             {...register("acceptMessages")}
             checked={acceptMessages}
             onCheckedChange={handleSwitchChange}
             disabled={isSwitchLoading}
           />
-          <span className="ml-3 text-gray-700">
+          <span className="ml-3 text-gray-300">
             Accept Messages: <strong>{acceptMessages ? "On" : "Off"}</strong>
           </span>
         </div>
 
-        <Separator className="my-6" />
+        <Separator className="my-6 border-gray-600" />
 
         {/* Refresh Messages Button */}
         <Button
-          className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-md font-medium flex items-center gap-2 text-sm"
+          className="mt-4 px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white rounded-lg shadow-lg transition-all transform hover:scale-105 flex items-center gap-2"
           onClick={(e) => {
             e.preventDefault();
             fetchMessages(true);
@@ -204,14 +156,19 @@ function UserDashboard() {
               <MessageCard
                 key={message._id}
                 message={message}
-                onMessageDelete={handleDeleteMessage}
+                onMessageDelete={(id) =>
+                  setMessages(messages.filter((m) => m._id !== id))
+                }
               />
             ))
           ) : (
-            <p className="text-center text-gray-600">No messages to display.</p>
+            <p className="text-center text-gray-400">No messages to display.</p>
           )}
         </div>
       </div>
+      <footer className="text-center p-4 md:p-6 bg-gradient-to-r from-gray-900 to-gray-700 text-gray-300 border-t border-gray-600 shadow-inner">
+        © 2025 True Suggestion. All rights reserved.
+      </footer>
     </div>
   );
 }

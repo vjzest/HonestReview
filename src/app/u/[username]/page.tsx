@@ -100,9 +100,9 @@ export default function SendMessage() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-b from-blue-900 to-purple-800">
-        <div className="container mx-auto my-8 p-6 bg-white/20 backdrop-blur-lg rounded-xl max-w-4xl shadow-lg border border-white/30 text-white">
-          <h1 className="text-4xl font-bold mb-6 text-center text-yellow-600">
+      <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-b from-gray-900 to-gray-700">
+        <div className="container mx-auto my-8 p-6 bg-gray-800/70 backdrop-blur-lg rounded-xl max-w-4xl shadow-lg border border-gray-600 text-white">
+          <h1 className="text-4xl font-bold mb-6 text-center text-yellow-400">
             Public Profile Link
           </h1>
           <Form {...form}>
@@ -112,13 +112,13 @@ export default function SendMessage() {
                 name="content"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-medium text-gray-200">
+                    <FormLabel className="font-medium text-gray-300">
                       Send Anonymous Message to @{username}
                     </FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="Write your anonymous message here"
-                        className="resize-none p-4 border border-white/30 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-white text-black"
+                        className="resize-none p-4 border border-gray-500 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 placeholder-gray-400 text-white"
                         rows={5}
                         {...field}
                       />
@@ -150,7 +150,7 @@ export default function SendMessage() {
             <div className="space-y-2">
               <Button
                 onClick={fetchSuggestedMessages}
-                className="bg-yellow-400 text-black hover:bg-yellow-500 transition"
+                className="bg-cyan-400 text-black hover:bg-cyan-500 transition"
                 disabled={isSuggestLoading}
               >
                 {isSuggestLoading ? (
@@ -162,13 +162,15 @@ export default function SendMessage() {
                   "Suggest Messages"
                 )}
               </Button>
-              <p className="text-gray-200">
+              <p className="text-gray-300">
                 Click on any message below to select it.
               </p>
             </div>
-            <Card className="bg-white/10 backdrop-blur-md border border-white/30 text-black">
+            <Card className="bg-gray-700/70 backdrop-blur-md border border-gray-500 text-white">
               <CardHeader>
-                <h3 className="text-xl font-semibold text-black">Messages</h3>
+                <h3 className="text-xl font-semibold text-purple-400">
+                  Messages
+                </h3>
               </CardHeader>
               <CardContent className="flex flex-col space-y-4">
                 {error ? (
@@ -178,7 +180,7 @@ export default function SendMessage() {
                     <Button
                       key={index}
                       variant="outline"
-                      className="mb-2 text-black border-white/30 hover:bg-yellow-400 hover:text-black px-4 py-2 text-left whitespace-normal break-words"
+                      className="mb-2 text-black border-gray-500 hover:bg-yellow-400 hover:text-black px-4 py-2 text-left whitespace-normal break-words"
                       onClick={() => handleMessageClick(message)}
                     >
                       {message}
@@ -188,11 +190,11 @@ export default function SendMessage() {
               </CardContent>
             </Card>
           </div>
-          <Separator className="my-6 border-white/30" />
+          <Separator className="my-6 border-gray-500" />
           <div className="text-center">
-            <div className="mb-4 text-gray-200">Get Your Message Board</div>
+            <div className="mb-4 text-gray-300">Get Your Message Board</div>
             <Link href={"/sign-up"}>
-              <Button className="bg-yellow-400 text-black hover:bg-yellow-500 transition">
+              <Button className="bg-purple-500 text-white hover:bg-purple-600 transition">
                 Create Your Account
               </Button>
             </Link>
