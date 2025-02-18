@@ -59,7 +59,11 @@ export default function VerificationEmail({
 
           {/* Verify Button */}
           <Button
+<<<<<<< HEAD
             href={`honest-review.vercel.app/verify/${username}`}
+=======
+            href={`honest-review-12.vercel.app/verify/${username}`}
+>>>>>>> c2148533e44cd34bb12db0e1fb0007f4315e3027
             className="mt-6 bg-teal-600 text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-teal-700 transition-all shadow-md inline-block"
           >
             ✅ Verify My Account
