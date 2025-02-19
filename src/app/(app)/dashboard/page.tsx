@@ -16,18 +16,15 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AcceptMessageSchema } from "@/schemas/acceptMessageSchema";
 import Navbar from "@/components/Navbar";
-
 function UserDashboard() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
-
   const { toast } = useToast();
   const { data: session } = useSession();
   const form = useForm({
     resolver: zodResolver(AcceptMessageSchema),
   });
-
   const { register, watch, setValue } = form;
   const acceptMessages = watch("acceptMessages");
 
@@ -55,7 +52,6 @@ function UserDashboard() {
     },
     [toast]
   );
-
   useEffect(() => {
     if (!session || !session.user) return;
     fetchMessages();
@@ -172,5 +168,4 @@ function UserDashboard() {
     </div>
   );
 }
-
 export default UserDashboard;
