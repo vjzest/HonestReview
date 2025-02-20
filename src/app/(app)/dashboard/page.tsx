@@ -72,9 +72,7 @@ function UserDashboard() {
       });
     }
   };
-
   if (!session || !session.user) return <div></div>;
-
   const { username } = session.user as User;
   const profileUrl = `${window.location.protocol}//${window.location.host}/u/${username}`;
 
@@ -84,7 +82,6 @@ function UserDashboard() {
         <h1 className="text-4xl font-extrabold text-gray-200 mb-6">
           Dashboard
         </h1>
-
         {/* Profile Link Section */}
         <div className="mb-6 bg-gray-900/50 p-4 rounded-lg shadow-md border border-gray-700">
           <h2 className="text-xl font-semibold text-gray-300 mb-3">
@@ -113,7 +110,6 @@ function UserDashboard() {
             </div>
           </div>
         </div>
-
         {/* Message Acceptance Toggle */}
         <div className="flex items-center bg-gray-900/50 p-4 rounded-lg shadow-md border border-gray-700">
           <Switch
@@ -126,7 +122,6 @@ function UserDashboard() {
             Accept Messages: <strong>{acceptMessages ? "On" : "Off"}</strong>
           </span>
         </div>
-
         <Separator className="my-6 border-gray-600" />
 
         {/* Refresh Messages Button */}
