@@ -1,10 +1,8 @@
 import dbConnect from '@/lib/dbConnect';
 import UserModel from '@/model/User';
-
 export async function POST(request: Request) {
   // Connect to the database
   await dbConnect();
-
   try {
     const { username, code } = await request.json();
     const decodedUsername = decodeURIComponent(username);
@@ -16,16 +14,13 @@ export async function POST(request: Request) {
         { status: 404 }
       );
     }
-
     // Check if the code is correct and not expired
     const isCodeValid = user.verifyCode === code;
     const isCodeNotExpired = new Date(user.verifyCodeExpiry) > new Date();
-
     if (isCodeValid && isCodeNotExpired) {
       // Update the user's verification status
       user.isVerified = true;
       await user.save();
-
       return Response.json(
         { success: true, message: 'Account verified successfully' },
         { status: 200 }

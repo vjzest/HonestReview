@@ -7,7 +7,6 @@ import { User } from 'next-auth';
 export async function POST(request: Request) {
   // Connect to the database
   await dbConnect();
-
   const session = await getServerSession(authOptions);
   const user: User = session?.user;
   if (!session || !session.user) {
@@ -16,10 +15,8 @@ export async function POST(request: Request) {
       { status: 401 }
     );
   }
-
   const userId = user._id;
   const { acceptMessages } = await request.json();
-
   try {
     // Update the user's message acceptance status
     const updatedUser = await UserModel.findByIdAndUpdate(
@@ -27,7 +24,6 @@ export async function POST(request: Request) {
       { isAcceptingMessages: acceptMessages },
       { new: true }
     );
-
     if (!updatedUser) {
       // User not found
       return Response.json(
